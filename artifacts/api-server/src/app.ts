@@ -1,12 +1,21 @@
 import express, { type Express } from "express";
 import cors from "cors";
-import * as pinoHttpModule from "pino-http";
+import { createRequire } from "node:module";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
-const app: Express = express();
+const require = createRequire(import.meta.url);
 
-const pinoHttp = pinoHttpModule.default;
+// pino-http is CommonJS, so load it using require.
+const pinoHttp = require("pino-http") as (options: {
+  logger: typeof logger;
+  serializers?: {
+    req?: (req: any) => unknown;
+    res?: (res: any) => unknown;
+  };
+}) => any;
+
+const app: Express = express();
 
 app.use(
   pinoHttp({
@@ -35,6 +44,4 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
 export default app;
-
-
 
