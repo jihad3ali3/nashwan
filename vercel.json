@@ -1,10 +1,5 @@
 {
   "buildCommand": "pnpm --filter @workspace/api-server build",
-  "functions": {
-    "api/index.ts": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
